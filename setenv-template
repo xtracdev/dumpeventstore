@@ -1,0 +1,6 @@
+export ATOMFEED_ENDPOINT=<host name>
+export http_proxy=<your proxy or delete this line>
+export KEY_ALIAS=<kms alias to decrypt feed>
+export AWS_REGION=
+export AWS_PROFILE=
+
