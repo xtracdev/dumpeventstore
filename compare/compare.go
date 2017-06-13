@@ -64,6 +64,46 @@ func dumpMap(fileName string) map[string]string{
 	return agg2DataMap
 }
 
+func map1KeysInMap2(map1, map2 map[string]string, map1Name, map2Name string) {
+	keys := 0
+	missing := 0
+
+	for k,_ := range map1 {
+		keys++
+		_, ok := map2[k]
+		if !ok {
+			fmt.Printf("key %s not in %s\n", k, map2Name)
+			missing++
+		}
+	}
+
+	fmt.Printf("%d of %d keys in %s missing from %s map\n", missing, keys, map1Name, map2Name)
+}
+
+func map1ContentInMap2(map1, map2 map[string]string, map1Name, map2Name string) {
+	keys := 0
+	different := 0
+
+	for k,v := range map1 {
+		keys++
+		val, ok := map2[k]
+		if ok {
+			if v != val {
+				fmt.Println("content different between maps for",k)
+				different += 1
+
+				aggId := aggIdFromKey(k)
+				desc, ok := knownAggs[aggId]
+				if ok {
+					fmt.Println("\t... => ", desc)
+				}
+			}
+		}
+	}
+
+	fmt.Printf("%d values in map %s different from %s\n", different, map1Name, map2Name)
+}
+
 func main() {
 	if len(os.Args) != 3 {
 		fmt.Printf("Usage: %s\n <src dump> <target dump>", os.Args[0])
@@ -81,5 +121,13 @@ func main() {
 	fmt.Println("Make target map")
 	targetMap := dumpMap(target)
 
-	fmt.Printf("%d source records, %d target records", len(srcMap), len(targetMap))
+	fmt.Printf("%d source records, %d target records\n", len(srcMap), len(targetMap))
+
+	fmt.Printf("\nCompare src and target keys\n")
+	map1KeysInMap2(srcMap, targetMap, "src map", "target map")
+	map1KeysInMap2(targetMap, srcMap, "target map", "src map")
+
+	fmt.Printf("\nCompare content\n")
+	map1ContentInMap2(srcMap, targetMap, "src map", "target map")
+	map1ContentInMap2(targetMap, srcMap, "target map", "src map")
 }
