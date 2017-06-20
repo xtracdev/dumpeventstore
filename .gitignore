@@ -2,3 +2,5 @@ setenv-pgsrc
 setenv-orasrc
 oraevents.txt
 pgevents.txt
+ora.txt
+pg.txt

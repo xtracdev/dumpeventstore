@@ -1,22 +1,23 @@
 package main
 
 import (
-	"os"
-	"errors"
-	"github.com/aws/aws-sdk-go/service/kms"
-	log "github.com/Sirupsen/logrus"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"io/ioutil"
-	"fmt"
-	"golang.org/x/tools/blog/atom"
-	"encoding/xml"
-	"crypto/tls"
 	"crypto/aes"
 	"crypto/cipher"
-	"strings"
+	"crypto/tls"
 	"encoding/base64"
+	"encoding/xml"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
+	"strings"
+
+	log "github.com/Sirupsen/logrus"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/kms"
+	"golang.org/x/tools/blog/atom"
 )
 
 //HttpFeedReader defines a type for an Http Feed reader
@@ -231,7 +232,7 @@ func feedIdFromResource(feedURL string) string {
 
 //Get first feed navigates a feed set from the recent feed all the way back
 //to the first acchived feed
-func  getFirstFeed(feedReader *HttpFeedReader) (*atom.Feed, error) {
+func getFirstFeed(feedReader *HttpFeedReader) (*atom.Feed, error) {
 	log.Info("Looking for first feed")
 	//Start with recent
 	var feed *atom.Feed
@@ -267,7 +268,6 @@ func  getFirstFeed(feedReader *HttpFeedReader) (*atom.Feed, error) {
 	return feed, nil
 }
 
-
 func main() {
 	feedReader, err := createFeedReader()
 	if err != nil {
@@ -301,9 +301,8 @@ func main() {
 		}
 
 		for _, entry := range feed.Entry {
-			fmt.Printf("%s %s\n", entry.ID, entry.Content.Body)
+			fmt.Printf("%s %s %s %s\n", entry.ID, entry.Content.Body, entry.Published, entry.Content.Type)
 		}
 	}
 
 }
-

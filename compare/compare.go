@@ -1,19 +1,19 @@
 package main
 
 import (
-	"os"
+	"bufio"
 	"fmt"
 	"log"
-	"bufio"
+	"os"
 	"strings"
 )
 
-var knownAggs = map[string]string {
-	"2e662fd5-a9cc-42d8-a85a-ac2eb75827f6":"dc seeded app",
+var knownAggs = map[string]string{
+	"2e662fd5-a9cc-42d8-a85a-ac2eb75827f6": "dc seeded app",
 }
 
 func aggIdFromKey(key string) string {
-	parts := strings.Split(key,":")
+	parts := strings.Split(key, ":")
 	if len(parts) == 4 {
 		return parts[2]
 	} else {
@@ -21,7 +21,7 @@ func aggIdFromKey(key string) string {
 	}
 }
 
-func dumpMap(fileName string) map[string]string{
+func dumpMap(fileName string) map[string]string {
 	agg2DataMap := make(map[string]string)
 	recNo := 1
 
@@ -34,12 +34,12 @@ func dumpMap(fileName string) map[string]string{
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		lineParts := strings.Split(line," ")
-		if len(lineParts) != 2 {
+		lineParts := strings.Split(line, " ")
+		if len(lineParts) < 2 {
 			fmt.Println("skipping", line)
 		}
 
-		val,ok := agg2DataMap[lineParts[0]]
+		val, ok := agg2DataMap[lineParts[0]]
 		if ok {
 			fmt.Println("Map already has entry for", lineParts[0])
 			fmt.Println("\thas", val)
@@ -68,7 +68,7 @@ func map1KeysInMap2(map1, map2 map[string]string, map1Name, map2Name string) {
 	keys := 0
 	missing := 0
 
-	for k,_ := range map1 {
+	for k, _ := range map1 {
 		keys++
 		_, ok := map2[k]
 		if !ok {
@@ -84,12 +84,12 @@ func map1ContentInMap2(map1, map2 map[string]string, map1Name, map2Name string) 
 	keys := 0
 	different := 0
 
-	for k,v := range map1 {
+	for k, v := range map1 {
 		keys++
 		val, ok := map2[k]
 		if ok {
 			if v != val {
-				fmt.Println("content different between maps for",k)
+				fmt.Println("content different between maps for", k)
 				different += 1
 
 				aggId := aggIdFromKey(k)
